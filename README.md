@@ -4,6 +4,7 @@ Example for arduino to esp8266
 
 #### Install https://github.com/Links2004/arduinoWebSockets 
 
+for heroku server 👌
 ```
 USE_SERIAL.printf("[SETUP] WiFi Connected %s\n", ip.c_str());
 socketIO.begin("testappnani.herokuapp.com", 80, "/socket.io/?EIO=4");
