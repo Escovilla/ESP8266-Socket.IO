@@ -2,7 +2,7 @@
 
 Example for arduino to esp8266 
 
-## Install https://github.com/Links2004/arduinoWebSockets 
+#### Install https://github.com/Links2004/arduinoWebSockets 
 
 ```
 USE_SERIAL.printf("[SETUP] WiFi Connected %s\n", ip.c_str());
