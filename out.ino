@@ -2,23 +2,13 @@
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include <SocketIOclient.h>
-#include <Hash.h>
 #include <ArduinoJson.h>
-#include <DHT.h>
-
-#define DHTTYPE    DHT11 
 SocketIOclient socketIO;
-
 const char* ssid = "pass";
 const char* password = "ssid";
-#define dht_dpin D6
-
-DHT dht(dht_dpin, DHTTYPE);
-float t = 0.0;
-float h = 0.0;
 #define USE_SERIAL Serial
-
 long actor1;
+
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length) {
   switch (type) {
     case sIOtype_DISCONNECT:
@@ -51,9 +41,9 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length)
       break;
   }
 }
+
 void setup() {
   USE_SERIAL.begin(115200);
-
   WiFi.begin(ssid, password);
   Serial.println("Connecting to WiFi");
   while (WiFi.status() != WL_CONNECTED) {
@@ -73,19 +63,8 @@ unsigned long messageTimestamp = 0;
 
 void loop() {
   socketIO.loop();
-
   uint64_t now = millis();
-
   if (now - messageTimestamp > 100) {
-    float newT = dht.readTemperature();
-    if (isnan(newT)) {
-      Serial.println("Failed to read from DHT sensor!");
-    }
-    else {
-      t = newT;
-      Serial.println(t);
-    }
-    
     messageTimestamp = now;
     DynamicJsonDocument doc(1024);
     JsonArray array = doc.to<JsonArray>();
@@ -95,22 +74,11 @@ void loop() {
 
     actor1 = random(100, 142);
     param1["id"] = 20;
-    param2["data"] = t;
+    param2["data"] = actor1;
 
     String output;
     serializeJson(doc, output);
     socketIO.sendEVENT(output);
     USE_SERIAL.println(output);
   }
-}
-
-String processor(const String& var){
-  //Serial.println(var);
-  if(var == "TEMPERATURE"){
-    return String(t);
-  }
-  else if(var == "HUMIDITY"){
-    return String(h);
-  }
-  return String();
 }
