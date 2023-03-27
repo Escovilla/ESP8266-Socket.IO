@@ -55,7 +55,7 @@ void setup() {
 
   String ip = WiFi.localIP().toString();
   USE_SERIAL.printf("[SETUP] WiFi Connected %s\n", ip.c_str());
-  socketIO.begin("testappnani.herokuapp.com", 80, "/socket.io/?EIO=4");
+  socketIO.begin("your_soket", 80, "/socket.io/?EIO=4");
   socketIO.onEvent(socketIOEvent);
 }
  
